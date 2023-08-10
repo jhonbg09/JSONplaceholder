@@ -4,9 +4,9 @@ const postsRouter = require('./postsRouter');
 
 const mainRouter = Router();
 
-mainRouter.use('/', usersRouter);
+mainRouter.use('/users', usersRouter);
 
-mainRouter.use('/', postsRouter);
+mainRouter.use('/posts', postsRouter);
 
 module.exports = mainRouter;
 
