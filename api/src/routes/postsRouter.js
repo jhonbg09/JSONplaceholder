@@ -1,9 +1,8 @@
 const { Router } = require("express");
+const { createPostsHandler } = require("../handler/CreatePostsHandler");
 
 const postsRouter = Router();
 
-postsRouter.post("/", (req, res) => {
-  res.status(200).send("Estoy creando un posts");
-});
+postsRouter.post("/", createPostsHandler);
 
 module.exports = postsRouter;
