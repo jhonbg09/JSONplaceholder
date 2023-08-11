@@ -1,3 +1,4 @@
+const {createUserDB} = require('../controllers/usersControllers')
 
 const userHandler = (req, res) => {
     const {name, phone} = req.query; 
@@ -11,10 +12,14 @@ const detailHandler = (req, res) => {
   res.status(200).send(`Detalles del usuario ${id}`);
 };
 
-const createUsers = (req, res) => {
-    const {name, email, phone}= req.body
-
-  res.status(200).send(`Bienvenido ${name}, su contacto es: ${phone}, correo: ${email}`);
+const createUsers = async(req, res) => {
+    const {name, email, phone}= req.body;
+    try {
+      const response = await createUserDB(name, email, phone);//ESTA FUNCION LA TREAMOS DE CONTROLLERS const {createUserDB} = require('../controllers/usersControllers')
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json({error:error.message})
+    }
 };
 
 module.exports = {
