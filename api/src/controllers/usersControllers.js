@@ -1,7 +1,20 @@
-const { users } = require('../db') //ese users los traemos de la db
 
-const createUserDB = async(name, email, phone) =>{ 
-    return await users.create({name, email, phone});
+const { users } = require("../db"); //ese users los traemos de la db
+const axios = require("axios");
+
+const createUserDB = async (name, email, phone) => {
+  return await users.create({ name, email, phone });
 };
 
-module.exports = {createUserDB};
+const getUserById = async (id, source) => {
+  const response =
+    source === "api"
+      ? (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data
+      : await users.findByPk(id);
+  return response;
+};
+
+module.exports = {
+  createUserDB,
+  getUserById,
+};
