@@ -1,10 +1,9 @@
-const { createUserDB, getUserById } = require("../controllers/usersControllers");
+const { createUserDB, getUserById, searchUserByName, getAllUsers} = require("../controllers/usersControllers");
 
-const userHandler = (req, res) => {
-  const { name, phone } = req.query;
-  if (name && phone)
-    res.status(200).send(`informacion de usuario: ${name} contacto: ${phone}`);
-  res.status(200).send("Devuelvo todos los usuarios");
+const userHandler = async(req, res) => {
+  const { name } = req.query;
+  const results = name ? searchUserByName(name) : await getAllUsers();
+  res.status(200).json(results);
 };
 
 
