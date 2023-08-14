@@ -2,7 +2,7 @@ const { createUserDB, getUserById, searchUserByName, getAllUsers} = require("../
 
 const userHandler = async(req, res) => {
   const { name } = req.query;
-  const results = name ? searchUserByName(name) : await getAllUsers();
+  const results = name ? await searchUserByName(name) : await getAllUsers();
   res.status(200).json(results);
 };
 
@@ -28,6 +28,8 @@ const createUsers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
 
 module.exports = {
   userHandler,

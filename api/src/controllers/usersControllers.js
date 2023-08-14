@@ -1,5 +1,20 @@
+
 const { users } = require("../db"); //ese users los traemos de la db
 const axios = require("axios");
+
+
+const cleanArray = (arr) => {
+  const clean = arr.map((elem) => {
+    return {
+      id: elem.id,
+      name: elem.name,
+      email: elem.email,
+      phone: elem.phone,
+      created: false,
+    };
+  });
+  return clean;
+};
 
 const createUserDB = async (name, email, phone) => {
   return await users.create({ name, email, phone });
@@ -14,21 +29,41 @@ const getUserById = async (id, source) => {
   return response;
 };
 
-const searchUserByName = async () => {
+const searchUserByName = async (name) => {
+  const databaseUsers = await users.findAll({where: { name:name } });
+  
+   //tiene que buscar en api
+   const apiUsersRaw = (
+    await axios.get(`https://jsonplaceholder.typicode.com/users`)
+  ).data;
+
+  //Limpiando la infromacion que viene de la "api"
+  const apiUsers = cleanArray(apiUsersRaw);
+
+  const filteredApi = apiUsers.filter((users) => {
+    return users.name.toLowerCase() === name.toLowerCase();
+  });
+
+  return [...databaseUsers, ...filteredApi]
 
 };
 
 const getAllUsers = async () => {
   //tiene que buscar en bbd
   const databaseUsers = await users.findAll();
+
   //tiene que buscar en api
-  const apiUsers = (
+  const apiUsersRaw = (
     await axios.get(`https://jsonplaceholder.typicode.com/users`)
   ).data;
+
+  //Limpiando la infromacion que viene de la "api"
+  const apiUsers = cleanArray(apiUsersRaw);
+
   //tiene que unificar la informacion
   return [...databaseUsers, ...apiUsers];
 };
-// repaso min 36 jorge vega
+
 
 module.exports = {
   createUserDB,
