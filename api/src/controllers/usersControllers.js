@@ -1,5 +1,5 @@
 
-const { users } = require("../db"); //ese users los traemos de la db
+const { users, posts } = require("../db"); //ese users los traemos de la db
 const axios = require("axios");
 
 
@@ -25,7 +25,12 @@ const getUserById = async (id, source) => {
     source === "api"
       ? (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`))
           .data
-      : await users.findByPk(id);
+      : await users.findByPk(id, {
+        include:{// este include lo traemos de equelize
+          model: posts,
+          attributes: ["title", "body"]
+        }
+      });//el segunto argumento vamos a colocar 
   return response;
 };
 
